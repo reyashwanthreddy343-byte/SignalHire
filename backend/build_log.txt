@@ -1,0 +1,193 @@
+﻿.\venv\Scripts\python.exe : [32m2026-06-18 12:32:38.086[0m | [33m[1mWARNING [0m | 
+[36msrc.models.faiss_index[0m:[36m<module>[0m:[36m22[0m - [33m[1mfaiss not installed ΓÇö using numpy fallback 
+index (still fast for <500k vectors)[0m
+At C:\Users\asus\AppData\Local\Temp\ps-script-acd574dd-0674-4827-ab0f-fcda63d35d1e.ps1:7 char:66
++ ... Q\backend"; .\venv\Scripts\python.exe -m src.scripts.build_index --li ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([32m2026-06-18...0k vectors)[0m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[32m2026-06-18 12:32:47.799[0m | [1mINFO    [0m | [36m__main__[0m:[36mmain[0m:[36m93[0m - [1mLoading 
+candidates from C:\Users\asus\Desktop\BIG 3\INDIA RUNS\c_iq\India_runs_data_and_ai_challenge\candidates.jsonl[0m
+[32m2026-06-18 12:32:47.822[0m | [1mINFO    [0m | [36m__main__[0m:[36mmain[0m:[36m104[0m - [1mLoaded 500 
+raw candidate records[0m
+[32m2026-06-18 12:32:47.853[0m | [1mINFO    [0m | [36m__main__[0m:[36mmain[0m:[36m108[0m - [1mConverted to 
+CandidateProfile in 0.0s[0m
+[32m2026-06-18 12:32:47.859[0m | [1mINFO    [0m | [36m__main__[0m:[36mmain[0m:[36m115[0m - [1mCareer 
+signals extracted in 0.0s[0m
+[32m2026-06-18 12:33:43.646[0m | [1mINFO    [0m | [36msrc.models.embedder[0m:[36m_load_model[0m:[36m44[0m - 
+[1mLoading sentence-transformer model: all-MiniLM-L6-v2[0m
+'[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)' 
+thrown while requesting HEAD 
+https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/adapter_config.json
+Retrying in 1s [Retry 1/5].
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\asus\Desktop\BIG 3\INDIA RUNS\CandidateIQ\backend\src\scripts\build_index.py", line 161, in <module>
+    asyncio.run(main(data_path, args.limit, args.batch_size))
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python314\Lib\asyncio\runners.py", line 204, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python314\Lib\asyncio\runners.py", line 127, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\asus\AppData\Local\Programs\Python\Python314\Lib\asyncio\base_events.py", line 719, in 
+run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "C:\Users\asus\Desktop\BIG 3\INDIA RUNS\CandidateIQ\backend\src\scripts\build_index.py", line 118, in main
+    embedder = get_embedder()
+  File "C:\Users\asus\Desktop\BIG 3\INDIA RUNS\CandidateIQ\backend\src\models\embedder.py", line 148, in get_embedder
+    return Embedder()
+  File "C:\Users\asus\Desktop\BIG 3\INDIA RUNS\CandidateIQ\backend\src\models\embedder.py", line 52, in __init__
+    self.model = _load_model()
+                 ~~~~~~~~~~~^^
+  File "C:\Users\asus\Desktop\BIG 3\INDIA RUNS\CandidateIQ\backend\src\models\embedder.py", line 45, in _load_model
+    return SentenceTransformer("all-MiniLM-L6-v2")
+  File "C:\Users\asus\Desktop\BIG 3\INDIA 
+RUNS\CandidateIQ\backend\venv\Lib\site-packages\sentence_transformers\util\decorators.py", line 41, in wrapper
+    return func(*args, **kwargs)
+  File "C:\Users\asus\Desktop\BIG 3\INDIA 
+RUNS\CandidateIQ\backend\venv\Lib\site-packages\sentence_transformers\sentence_transformer\model.py", line 188, in 
+__init__
+    super().__init__(
+    ~~~~~~~~~~~~~~~~^
+        model_name_or_path=model_name_or_path,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<13 lines>...
+        default_prompt_name=default_prompt_name,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\asus\Desktop\BIG 3\INDIA 
+RUNS\CandidateIQ\backend\venv\Lib\site-packages\sentence_transformers\base\model.py", line 216, in __init__
+    modules, self.module_kwargs = self._load_modules(
+                                  ~~~~~~~~~~~~~~~~~~^
+        model_name_or_path,
+        ^^^^^^^^^^^^^^^^^^^
+    ...<7 lines>...
+        config_kwargs=config_kwargs,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\asus\Desktop\BIG 3\INDIA 
+RUNS\CandidateIQ\backend\venv\Lib\site-packages\sentence_transformers\base\model.py", line 1002, in _load_modules
+    return self._load_config_modules(model_name_or_path, **load_kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\asus\Desktop\BIG 3\INDIA 
+RUNS\CandidateIQ\backend\venv\Lib\site-packages\sentence_transformers\base\model.py", line 1208, in 
+_load_config_modules
+    module = module_class.load(
+        model_name_or_path,
+    ...<11 lines>...
+        backend=self.backend,
+    )
+  File "C:\Users\asus\Desktop\BIG 3\INDIA 
+RUNS\CandidateIQ\backend\venv\Lib\site-packages\sentence_transformers\base\modules\transformer.py", line 2030, in load
+    return cls(model_name_or_path=model_name_or_path, **init_kwargs)
+  File "C:\Users\asus\Desktop\BIG 3\INDIA 
+RUNS\CandidateIQ\backend\venv\Lib\site-packages\sentence_transformers\util\decorators.py", line 87, in wrapper
+    return func(*args, **kwargs)
+  File "C:\Users\asus\Desktop\BIG 3\INDIA 
+RUNS\CandidateIQ\backend\venv\Lib\site-packages\sentence_transformers\base\modules\transformer.py", line 639, in 
+__init__
+    config, is_peft_model = self._load_config(model_name_or_path, backend, config_kwargs)
+                            ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\asus\Desktop\BIG 3\INDIA 
+RUNS\CandidateIQ\backend\venv\Lib\site-packages\sentence_transformers\base\modules\transformer.py", line 1647, in 
+_load_config
+    adapter_config_file = find_adapter_config_file(
+        model_name_or_path,
+    ...<4 lines>...
+        local_files_only=config_kwargs.get("local_files_only", False),
+    )
+  File "C:\Users\asus\Desktop\BIG 3\INDIA 
+RUNS\CandidateIQ\backend\venv\Lib\site-packages\transformers\utils\peft_utils.py", line 84, in find_adapter_config_file
+    adapter_cached_filename = cached_file(
+        model_id,
+    ...<11 lines>...
+        _raise_exceptions_for_connection_errors=False,
+    )
+  File "C:\Users\asus\Desktop\BIG 3\INDIA RUNS\CandidateIQ\backend\venv\Lib\site-packages\transformers\utils\hub.py", 
+line 293, in cached_file
+    file = cached_files(path_or_repo_id=path_or_repo_id, filenames=[filename], **kwargs)
+  File "C:\Users\asus\Desktop\BIG 3\INDIA RUNS\CandidateIQ\backend\venv\Lib\site-packages\transformers\utils\hub.py", 
+line 527, in cached_files
+    raise e
+  File "C:\Users\asus\Desktop\BIG 3\INDIA RUNS\CandidateIQ\backend\venv\Lib\site-packages\transformers\utils\hub.py", 
+line 437, in cached_files
+    hf_hub_download(
+    ~~~~~~~~~~~~~~~^
+        path_or_repo_id,
+        ^^^^^^^^^^^^^^^^
+    ...<10 lines>...
+        tqdm_class=tqdm_class,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\asus\Desktop\BIG 3\INDIA 
+RUNS\CandidateIQ\backend\venv\Lib\site-packages\huggingface_hub\utils\_validators.py", line 88, in _inner_fn
+    return fn(*args, **kwargs)
+  File "C:\Users\asus\Desktop\BIG 3\INDIA 
+RUNS\CandidateIQ\backend\venv\Lib\site-packages\huggingface_hub\file_download.py", line 1015, in hf_hub_download
+    return _hf_hub_download_to_cache_dir(
+        # Destination
+    ...<15 lines>...
+        dry_run=dry_run,
+    )
+  File "C:\Users\asus\Desktop\BIG 3\INDIA 
+RUNS\CandidateIQ\backend\venv\Lib\site-packages\huggingface_hub\file_download.py", line 1148, in 
+_hf_hub_download_to_cache_dir
+    _get_metadata_or_catch_error(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        repo_id=repo_id,
+        ^^^^^^^^^^^^^^^^
+    ...<10 lines>...
+        retry_on_errors=True,
+        ^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\asus\Desktop\BIG 3\INDIA 
+RUNS\CandidateIQ\backend\venv\Lib\site-packages\huggingface_hub\file_download.py", line 1690, in 
+_get_metadata_or_catch_error
+    metadata = get_hf_file_metadata(
+        url=url,
+    ...<4 lines>...
+        retry_on_errors=retry_on_errors,
+    )
+  File "C:\Users\asus\Desktop\BIG 3\INDIA 
+RUNS\CandidateIQ\backend\venv\Lib\site-packages\huggingface_hub\utils\_validators.py", line 88, in _inner_fn
+    return fn(*args, **kwargs)
+  File "C:\Users\asus\Desktop\BIG 3\INDIA 
+RUNS\CandidateIQ\backend\venv\Lib\site-packages\huggingface_hub\file_download.py", line 1612, in get_hf_file_metadata
+    response = _httpx_follow_relative_redirects_with_backoff(
+        method="HEAD", url=url, headers=hf_headers, timeout=timeout, retry_on_errors=retry_on_errors
+    )
+  File "C:\Users\asus\Desktop\BIG 3\INDIA 
+RUNS\CandidateIQ\backend\venv\Lib\site-packages\huggingface_hub\utils\_http.py", line 685, in 
+_httpx_follow_relative_redirects_with_backoff
+    response = http_backoff(
+        method=method,
+    ...<3 lines>...
+        **no_retry_kwargs,
+    )
+  File "C:\Users\asus\Desktop\BIG 3\INDIA 
+RUNS\CandidateIQ\backend\venv\Lib\site-packages\huggingface_hub\utils\_http.py", line 559, in http_backoff
+    return next(
+        _http_backoff_base(
+    ...<9 lines>...
+        )
+    )
+  File "C:\Users\asus\Desktop\BIG 3\INDIA 
+RUNS\CandidateIQ\backend\venv\Lib\site-packages\huggingface_hub\utils\_http.py", line 467, in _http_backoff_base
+    response = client.request(method=method, url=url, **kwargs)
+  File "C:\Users\asus\Desktop\BIG 3\INDIA RUNS\CandidateIQ\backend\venv\Lib\site-packages\httpx\_client.py", line 825, 
+in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\asus\Desktop\BIG 3\INDIA RUNS\CandidateIQ\backend\venv\Lib\site-packages\httpx\_client.py", line 901, 
+in send
+    raise RuntimeError("Cannot send a request, as the client has been closed.")
+RuntimeError: Cannot send a request, as the client has been closed.

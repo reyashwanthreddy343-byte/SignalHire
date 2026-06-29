@@ -1,0 +1,54 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+env/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+
+# Data (don't commit large files — 464MB+ dataset stays local)
+data/raw/
+data/**/*.jsonl
+data/candidates.jsonl
+data/processed/
+**/candidates.jsonl
+**/India_runs_data_and_ai_challenge/
+c_iq/
+backend/model_cache/
+backend/uploads/
+backend/logs/
+
+# Output (regenerate from script)
+output/*.csv
+!output/ranked_candidates.csv
+output/*.xlsx
+output/*.json
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+
+# Backend
+backend/.env
+backend/uploads/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+*.log

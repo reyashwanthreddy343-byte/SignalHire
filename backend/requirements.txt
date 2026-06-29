@@ -1,0 +1,40 @@
+# Minimal backend requirements (core API). Heavy ML / binary packages
+# are commented out below — install them on Linux/with conda or Docker.
+
+# Core API
+fastapi==0.111.0
+uvicorn[standard]==0.29.0
+python-multipart==0.0.9
+pydantic==2.7.1
+pydantic-settings==2.2.1
+httpx==0.27.0
+aiofiles==23.2.1
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+
+# Utilities
+python-dotenv==1.0.1
+loguru==0.7.2
+rich==13.7.1
+tqdm==4.66.4
+joblib==1.4.2
+requests==2.32.2
+jinja2==3.1.4
+
+# ---- ML packages (required for ranking pipeline) ----
+sentence-transformers>=3.0.1
+faiss-cpu>=1.14.0            # use latest wheel matching Python version on Windows
+scikit-learn>=1.5.0
+numpy>=1.26.4
+scipy>=1.13.0
+spacy>=3.7.4
+en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl
+pymupdf>=1.24.3
+python-docx>=1.1.2
+pandas>=2.2.2
+# beautifulsoup4==4.12.3
+# lxml==5.2.2
+# xlsxwriter==3.2.0
+# reportlab==4.2.0
+# redis==5.0.5
+# celery==5.4.0

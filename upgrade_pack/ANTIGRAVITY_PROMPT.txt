@@ -1,0 +1,128 @@
+SIGNALHIRE UPGRADE — INTEGRATION INSTRUCTIONS FOR AI CODING AGENT
+====================================================================
+
+CONTEXT:
+This is the existing CandidateIQ / SignalHire project located at:
+C:\Users\asus\Desktop\BIG 3\INDIA RUNS\CandidateIQ
+
+I have a folder called "upgrade_pack" (sent alongside this prompt) containing
+upgraded backend files. DO NOT create a new project, new folders, or a new
+workspace. Modify the EXISTING project in place.
+
+YOUR TASKS, IN ORDER:
+====================================================================
+
+1. REPLACE these existing files with the versions from upgrade_pack/
+   (same filenames map directly — read each upgrade_pack file fully,
+   then overwrite the existing file at the path shown):
+
+   upgrade_pack/role_ontology.json   -> backend/src/ontology/role_ontology.json
+   upgrade_pack/schemas.py           -> backend/src/schemas.py
+   upgrade_pack/pipeline_scorer.py   -> backend/src/models/scorer.py
+   upgrade_pack/embedder.py          -> backend/src/models/embedder.py
+   upgrade_pack/faiss_index.py       -> backend/src/models/faiss_index.py
+   upgrade_pack/gnn_role.py          -> backend/src/models/gnn_role.py
+   upgrade_pack/jd_parser.py         -> backend/src/parsers/jd_parser.py
+   upgrade_pack/career_signals.py    -> backend/src/extractors/career_signals.py
+   upgrade_pack/main.py              -> backend/src/main.py
+
+2. CREATE this new file (it does not exist yet):
+   upgrade_pack/hidden_gems.py       -> backend/src/api/hidden_gems.py
+
+3. CREATE this new directory and files:
+   backend/src/scripts/__init__.py   (empty file)
+   upgrade_pack/build_index.py       -> backend/src/scripts/build_index.py
+
+4. AFTER copying files, run a syntax check on every modified/created
+   Python file (python -m py_compile <file>) and fix any import errors
+   that arise from existing project conventions (e.g. if existing
+   pipeline.py imports CandidateProfile fields that no longer exist in
+   the new schemas.py, reconcile them — the new schemas.py uses
+   `career_history` as the primary field name and keeps `work_experience`
+   as an alias for backward compatibility).
+
+5. CHECK backend/src/pipeline.py for any references to fields/methods
+   that changed. Specifically:
+   - get_scorer(gnn=...) now returns SignalHireScorer() which takes no
+     gnn argument in its score_candidates() signature — verify pipeline.py
+     calls scorer.score_candidates(candidates, semantic_scores, jd, request)
+     with exactly these 4 positional args (it already does — just confirm).
+   - RankRequest now has a `.weights` property — if pipeline.py or any
+     API route builds RankRequest manually, ensure weight_* fields are
+     passed correctly (weight_semantic, weight_career, weight_activity,
+     weight_skill, weight_intent, weight_education).
+
+6. CHECK backend/src/api/rank.py — ensure the RankRequest model fields
+   match the new schemas.py (weight_skill, weight_intent, weight_education
+   are NEW fields with defaults, so existing requests without them will
+   still work — just verify no validation errors).
+
+7. DELETE the stale cached index so it rebuilds with the new code:
+   - Delete folder: backend/model_cache/faiss_index/
+   - Delete file:   backend/model_cache/gnn_model.pkl
+
+8. The real dataset (100,000 candidates) is already at:
+   data/candidates.jsonl
+   Run the ingestion script to build the new index:
+   cd backend
+   venv\Scripts\activate
+   python -m src.scripts.build_index --limit 5000 --batch-size 64
+
+   (Use --limit 5000 first for a fast ~2-3 minute test build. Once
+   verified working, re-run without --limit for the full 100k — this
+   will take longer and should be run when there's time, e.g. overnight
+   or during a break, NOT right before a demo.)
+
+9. Restart the backend:
+   python -m uvicorn src.main:app --reload --port 8000
+
+   Confirm in the logs:
+   - "Pipeline initialized" with "Candidates: 5000" (or 100000)
+   - "FAISS vectors: 5000"
+   - "GNN trained: True"
+   - No errors on startup
+
+10. Test the new Hidden Gems endpoint:
+    GET http://127.0.0.1:8000/api/v1/hidden-gems?min_experience=2&limit=10
+    Should return JSON with gems_found > 0 and a list of candidates.
+
+11. FRONTEND — add a new "Hidden Gems" tab/page:
+    - Create frontend/src/pages/HiddenGemsPage.tsx that calls
+      GET /api/v1/hidden-gems and displays results as cards showing:
+      candidate name, current title, years of experience, gem_score
+      (as a badge/percentage), reason (as descriptive text), and
+      suggested_roles (as tags/chips).
+    - Add a route for it in App.tsx: <Route path="/hidden-gems" element={<HiddenGemsPage />} />
+      inside the existing <Route element={<Layout />}> block.
+    - Add a navigation link to it in the existing Layout/sidebar component
+      (find the nav component under frontend/src/components/shared/ and
+      add a link consistent with the existing style — same icon library
+      used elsewhere, which is @tabler/icons via "ti ti-*" classes,
+      use something like "ti ti-diamond" or "ti ti-sparkles").
+    - Match the existing visual style exactly: same color variables
+      (var(--bg), var(--bg2), var(--border), var(--text), var(--muted),
+      var(--blue)), same card/surface classes ("surface"), same spacing
+      conventions as RecruiterDashboard.tsx and RankingsPage.tsx.
+
+12. DO NOT remove or break any existing working features (CandidatePortal,
+    ComparePage, ConfigPage, EvaluatePage, HoneypotsPage, RankingsPage,
+    ProfilePage, LandingPage). Only ADD the Hidden Gems page and wire
+    in the upgraded backend files.
+
+13. After everything works, report back:
+    - Confirm backend starts cleanly with the new ontology (30+ roles
+      across CS, medical, civil, mechanical, legal, finance, marketing,
+      HR, teaching, design sectors — not just CS)
+    - Confirm /api/v1/hidden-gems returns real results
+    - Confirm frontend Hidden Gems page renders and links to real data
+    - List any files you had to additionally touch that weren't in
+      this instruction list, and why
+
+IMPORTANT CONSTRAINTS:
+- Work IN PLACE on the existing project. No new repos, no new folders
+  outside what's specified above, no new workspace.
+- Preserve existing .env, venv, docker config, and all other existing
+  features untouched.
+- If any existing file imports something from the old schemas.py/scorer.py
+  that no longer exists in the new versions, fix the import or add a
+  small compatibility shim rather than deleting functionality.
