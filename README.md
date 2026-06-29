@@ -1,34 +1,45 @@
-# SignalHire — Beyond Keywords. Real AI Infrastructure.
+# SignalHire
 
-> **India Runs × Hack2Skill** | Redrob Track 1 (Data & AI) + Track 2 (Ideation)  
-> **SignalHire** is a custom-built, enterprise-grade ML ranking pipeline evaluating over 100,000 real Redrob profiles using Linear Variational Autoencoders (VAEs), FAISS vector search, and a 6-signal explainable scoring engine.
-
----
-
-## 🏆 Why SignalHire Wins
-
-We didn't just wrap an OpenAI API key. We built a production-ready, entirely local ML infrastructure that processes 100,000 candidates in under 3 seconds.
-
-1. **Custom NLP Parsing (`spaCy`)**: Job descriptions and resumes are parsed locally using Named Entity Recognition (NER) to extract hard skills and years of experience — no LLM hallucination.
-2. **Linear Variational Autoencoder (VAE)**: We factor textual matrices into a 384-dimensional latent space natively. Our VAE bridges the vocabulary gap, understanding deep semantic relationships (e.g., *PyTorch* implies *Deep Learning*).
-3. **Sub-second Retrieval (FAISS)**: VAE outputs are mapped directly into Facebook AI Similarity Search (FAISS), enabling instantaneous retrieval across 100k+ candidates.
-4. **Deterministic Explainability**: Because we built the VAE and the 6-signal scoring engine, SignalHire generates plain-English reasoning natively from the latent space — zero hallucinations, zero API costs.
+**SignalHire** is a high-throughput, offline-first machine learning ranking pipeline developed for the India Runs × Hack2Skill (Redrob Track 1 & 2). It evaluates over 100,000 candidate profiles using a custom Linear Variational Autoencoder (VAE), FAISS vector search, and a deterministic 6-signal scoring engine.
 
 ---
 
-## 🚀 Quick Start (Local Deployment)
+## Architecture Overview
 
-### 1. Dataset Preparation
+SignalHire bypasses standard generative LLM wrappers in favor of a determinisitic, offline infrastructure designed for scale, privacy, and sub-second latency.
 
-Place the Redrob dataset locally (ensure it is NOT tracked by git — it is ~465 MB):
+1. **Entity Extraction (`spaCy`)**: Job descriptions and candidate resumes are parsed locally via a custom Named Entity Recognition (NER) pipeline to extract core competencies, roles, and temporal data (years of experience).
+2. **Latent Representation (Linear VAE)**: Textual matrices are factored into a 384-dimensional latent space natively. The VAE captures deep semantic relationships, allowing the system to bridge vocabulary gaps (e.g., establishing the semantic proximity of *PyTorch* and *Deep Learning*).
+3. **Vector Retrieval (FAISS)**: VAE outputs are indexed in Facebook AI Similarity Search (FAISS), enabling $O(1)$ nearest-neighbor retrieval across the 100k+ dataset.
+4. **Deterministic Scoring Engine**: Retrieved candidates are evaluated against a multi-variable heuristic model (Semantic, Career, Skill, Activity, Intent, Education). Explainability is generated natively from latent space distances rather than generative prompt interpretation.
+
+```text
+Job Description ──► Local NLP Parser (spaCy NER)
+                           │
+Candidate JSONL ──► Linear VAE Encoder ──► 384-d Latent Space
+                           │                           │
+                           └──────────► FAISS Index ◄───┘
+                                            │
+                                     6-Signal Scorer
+                                            │
+                         Ranked Output (XLSX) / REST API
+```
+
+---
+
+## Local Deployment
+
+### 1. Data Ingestion
+Ensure the source dataset is placed in the local directory structure. Due to size constraints (~465 MB), this file is excluded from version control.
 
 ```text
 India_runs_data_and_ai_challenge/
-├── candidates.jsonl      (~100,000 records, ~465 MB)
+├── candidates.jsonl      
 └── job_description.docx
 ```
 
-### 2. Run the Backend (FastAPI + FAISS + VAE)
+### 2. Backend Initialization (FastAPI)
+The backend requires Python 3.9+. Initializing the server will automatically build the FAISS index and train the VAE on the provided dataset.
 
 ```powershell
 cd backend
@@ -40,100 +51,60 @@ copy .env.example .env
 uvicorn src.main:app --host 127.0.0.1 --port 8000
 ```
 
-*Note: First startup builds the FAISS index and trains the VAE. This happens automatically.*
-
-### 3. Run the Frontend (React + Vite + Tailwind)
-
+### 3. Frontend Initialization (React / Vite)
 ```powershell
 cd frontend
 npm install
 npm run dev
-# Dashboard available at: http://127.0.0.1:5173
+# Server binds to: http://127.0.0.1:5173
 ```
 
-### 4. Generate Submission Output (No UI Required)
-
-To instantly generate the `ranked_candidates.xlsx` submission file against the 100k FAISS index:
+### 4. CLI Execution
+To execute the ranking pipeline headlessly and generate the submission artifact (`ranked_candidates.xlsx`):
 
 ```powershell
 backend\venv\Scripts\python.exe ml_training\02_generate_submission.py
-# → output/ranked_candidates.xlsx
 ```
 
 ---
 
-## 🧠 System Architecture
+## API Reference
 
-```text
-Job Description ──► Local NLP Parser (spaCy NER)
-                           │
-Candidate JSONL ──► Linear VAE Encoder ──► 384-d Latent Space
-                           │                           │
-                           └──────────► FAISS Index ◄───┘
-                                            │
-                                     6-Signal Scorer
-                          (Semantic 40% · Career 20% · Skill 20%
-                           · Activity 10% · Intent 5% · Education 5%)
-                                            │
-                         Ranked XLSX + React UI + Hidden Gems API
-```
+The backend exposes a RESTful API documented via Swagger UI (`/docs`).
 
----
-
-## 🛠️ Key Features
-
-| Feature | Technical Implementation |
-|---------|---------------------------|
-| **6-Signal Scoring** | Fuses Semantic similarity, Career trajectory, Skill gaps, Behavior, Intent, and Education |
-| **Hidden Gems** | Surfaces top talent with 0% keyword match but 80%+ semantic VAE match |
-| **Universal Intake** | Upload API accepts PDF, DOCX, JSONL, CSV, and ZIP natively |
-| **Explainability** | Per-candidate reasoning generated deterministically from VAE feature distances |
-| **Zero External APIs** | 100% local compute. No data privacy leaks. No OpenAI costs |
-
----
-
-## 🌐 API Endpoints
-
-| Method | Path | Description |
+| Method | Endpoint | Description |
 |--------|------|-------------|
-| GET | `/api/v1/health` | Check FAISS index size and VAE model status |
-| POST | `/api/v1/ingest` | Upload massive candidate JSONL files |
-| POST | `/api/v1/rank` | Rank candidates dynamically against a JD |
-| GET | `/api/v1/hidden-gems` | Query the VAE for high-talent, low-keyword candidates |
-| POST | `/api/v1/export/direct` | Export full rankings to CSV/XLSX |
-
-*Interactive Swagger Docs available at:* `http://127.0.0.1:8000/docs`
+| `GET` | `/api/v1/health` | Validates FAISS index allocation and VAE model state. |
+| `POST` | `/api/v1/ingest` | Initiates batch processing of candidate JSONL datasets. |
+| `POST` | `/api/v1/rank` | Executes the 6-signal ranking pipeline against a provided JD. |
+| `GET` | `/api/v1/hidden-gems` | Queries the latent space for high-semantic, low-keyword candidates. |
+| `POST` | `/api/v1/export/direct` | Compiles the current FAISS retrieval output to CSV/XLSX. |
 
 ---
 
-## 📂 Project Structure
+## Repository Structure
 
 ```text
 SignalHire/
 ├── backend/
 │   └── src/
-│       ├── models/           # VAE encoder, FAISS index, scorer
+│       ├── models/           # VAE encoder, FAISS index, Scorer
 │       ├── parsers/          # spaCy NLP document parser
-│       ├── ontology/         # Custom HR role ontology (40 roles, 75 skill synonyms)
-│       ├── api/              # FastAPI route handlers
-│       └── pipeline.py       # Core ranking pipeline orchestrator
+│       ├── ontology/         # Custom HR role ontology graph
+│       ├── api/              # FastAPI route controllers
+│       └── pipeline.py       # Core orchestration logic
 ├── frontend/
 │   └── src/
-│       ├── pages/            # Landing, Recruiter Dashboard, Hidden Gems
-│       └── components/       # WeightSliders, UploadZone, ScoreBar, SkillPill
-├── ml_training/              # EDA notebook + submission generator
-├── output/                   # ranked_candidates.xlsx (generated, gitignored)
-├── methodology.md            # Full scoring methodology for judges
-└── README.md
+│       ├── pages/            # React views (Dashboard, Analytics)
+│       └── components/       # UI components (ScoreBar, WeightSliders)
+├── ml_training/              # Inference scripts and EDA
+├── output/                   # Directory for generated artifacts (gitignored)
+└── methodology.md            # Mathematical breakdown of the scoring engine
 ```
 
 ---
 
-## 👨‍💻 About the Builder
+## Author
 
 **Yeshwanth Reddy Mandadi**  
-Built SignalHire for India Runs to demonstrate production-grade ML infrastructure. By bypassing standard GPT wrappers, SignalHire proves the power of offline Linear VAE embeddings, explainable multi-signal fusion, and sub-second 100,000+ candidate FAISS retrieval.
-
----
-
-*SignalHire — Beyond Keywords. Real Signals.*
+Developed for the India Runs × Hack2Skill event to demonstrate the viability of local, explainable ML infrastructure in high-throughput recruitment environments.
