@@ -108,9 +108,5 @@ SignalHire/
 
 ## Author
 
-
-
-
-
 **Yeshwanth Reddy Mandadi**  
 Developed for the India Runs × Hack2Skill event to demonstrate the viability of local, explainable ML infrastructure in high-throughput recruitment environments.
