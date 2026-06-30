@@ -103,6 +103,33 @@ SignalHire/
 ├── output/                   # Directory for generated artifacts (gitignored)
 └── methodology.md            # Mathematical breakdown of the scoring engine
 ```
+<details>
+  <summary><b>📸 Click to view all project screenshots</b></summary>
+  <br>
+
+  ![Screenshot 630](Screenshot%20(630).png)
+  ![Screenshot 631](Screenshot%20(631).png)
+  ![Screenshot 632](Screenshot%20(632).png)
+  ![Screenshot 633](Screenshot%20(633).png)
+  ![Screenshot 634](Screenshot%20(634).png)
+  ![Screenshot 635](Screenshot%20(635).png)
+  ![Screenshot 636](Screenshot%20(636).png)
+  ![Screenshot 637](Screenshot%20(637).png)
+  ![Screenshot 638](Screenshot%20(638).png)
+  ![Screenshot 639](Screenshot%20(639).png)
+  ![Screenshot 640](Screenshot%20(640).png)
+  ![Screenshot 641](Screenshot%20(641).png)
+  ![Screenshot 642](Screenshot%20(642).png)
+  ![Screenshot 643](Screenshot%20(643).png)
+  ![Screenshot 644](Screenshot%20(644).png)
+  ![Screenshot 645](Screenshot%20(645).png)
+  ![Screenshot 646](Screenshot%20(646).png)
+  ![Screenshot 647](Screenshot%20(647).png)
+  ![Screenshot 648](Screenshot%20(648).png)
+  ![Screenshot 649](Screenshot%20(649).png)
+  ![Screenshot 650](Screenshot%20(650).png)
+
+</details>
 
 ---
 
