@@ -1,3 +1,5 @@
+
+
 # SignalHire
 
 **SignalHire** is a high-throughput, offline-first machine learning ranking pipeline developed for the India Runs × Hack2Skill (Redrob Track 1 & 2). It evaluates over 100,000 candidate profiles using a custom Linear Variational Autoencoder (VAE), FAISS vector search, and a deterministic 6-signal scoring engine.
@@ -105,7 +107,10 @@ SignalHire/
 ---
 
 ## Author
-<img width="2560" height="1440" alt="Screenshot (630)" src="https://github.com/user-attachments/assets/fcec9ee6-beb6-4348-ad03-ad9c1bf6cc14" />
+
+
+
+
 
 **Yeshwanth Reddy Mandadi**  
 Developed for the India Runs × Hack2Skill event to demonstrate the viability of local, explainable ML infrastructure in high-throughput recruitment environments.
